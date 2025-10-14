@@ -41,7 +41,7 @@ function Leaderboard() {
           </div>
         ))}
       </div>
-      <p className="mt-6 text-sm text-gray-400">Auto-refreshes every 5 seconds 🔁</p>
+      <p className="mt-6 text-sm text-gray-400">Auto-refreshes every 5 seconds</p>
     </div>
   );
 }
