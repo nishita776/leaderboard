@@ -5,6 +5,7 @@ const API_KEY = 'AIzaSyDDBamzwXUcw-HhP9BoqDvLurLTBA9Pzvs';
 const SHEET_NAME = 'Sheet1';
 
 const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+
 function Leaderboard() {
   const [entries, setEntries] = useState([]);
 
@@ -13,14 +14,23 @@ function Leaderboard() {
       fetch(API_URL)
         .then((res) => res.json())
         .then((data) => {
-          console.log("Google Sheets data:", data);
-          setEntries(data.values || []);
+          const rows = data.values || [];
+          if (rows.length > 1) {
+            const header = rows[0]; 
+            const entriesWithoutHeader = rows.slice(1);
+
+            entriesWithoutHeader.sort((a, b) => Number(b[1]) - Number(a[1]));
+
+            setEntries([header, ...entriesWithoutHeader]);
+          } else {
+            setEntries(rows);
+          }
         })
         .catch((err) => console.error("Error fetching data:", err));
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000); 
+    const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);
 
